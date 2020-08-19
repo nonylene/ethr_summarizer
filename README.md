@@ -1,11 +1,11 @@
 # ethr_summarizer
 
-Summarize [ethr](https://github.com/microsoft/ethr) result log file to CSV.
+Summarize [ethr](https://github.com/microsoft/ethr) result log files to CSV.
 
 ## Usage
 
 ```
-$ python3 main.py -t [log dir]
+$ python3 ethr_summarizer.py -t [log dir]
 ```
 
 ## Log dir structure
