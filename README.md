@@ -14,7 +14,5 @@ $ python3 ethr_summarizer.py -t [log dir]
 $ ls [log dir]
 0 1 2 3 ...
 $ ls [log dir]/0
-0 1 2 3 ....
-$ ls [log dir]/0/0
-bandwidth.jl connections.jl latency.jl # ethr client logs
+pps.jl latency.jl # ethr client logs
 ```
