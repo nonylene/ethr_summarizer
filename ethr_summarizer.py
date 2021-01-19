@@ -1,12 +1,12 @@
-import json
 import argparse
-import os
-from typing import List, Optional
 import csv
+import json
+import os
 import sys
 from dataclasses import dataclass
-from statistics import mean
 from pathlib import Path
+from statistics import mean
+from typing import List, Optional
 
 # https://github.com/microsoft/ethr/blob/master/utils.go#L107
 UNITS = {
