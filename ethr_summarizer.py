@@ -98,28 +98,16 @@ class TestResult:
         )
 
 
-def avg_bandwidth(path: os.PathLike):
+def avg_pps(path: os.PathLike):
 
-    def _get_bps(line: str) -> Optional[float]:
+    def _get_pps(line: str) -> Optional[float]:
         json_ = json.loads(line)
         if json_['Type'] != "TestResult":
             return None
         test_result = TestResult.from_json(json_)
-        return test_result.bits_per_second
+        return test_result.packets_per_second
 
-    return mean(b for b in map(_get_bps, open(path)) if b is not None)
-
-
-def avg_connections(path: os.PathLike):
-
-    def _get_cps(line: str) -> Optional[float]:
-        json_ = json.loads(line)
-        if json_['Type'] != "TestResult":
-            return None
-        test_result = TestResult.from_json(json_)
-        return test_result.connections_per_second
-
-    return mean(b for b in map(_get_cps, open(path)) if b is not None)
+    return mean(b for b in map(_get_pps, open(path)) if b is not None)
 
 
 def avg_latency(path: os.PathLike):
@@ -136,16 +124,13 @@ def avg_latency(path: os.PathLike):
 
 def main(target: os.PathLike):
     writer = csv.writer(sys.stdout)
-    writer.writerow(['Entries', 'Lookups', 'BandWidth (bps)', 'Connections (cps)', 'Latency (us)'])
+    writer.writerow(['Alpha', 'Packets (pps)', 'Latency (us)'])
 
-    for mapdir in Path(target).iterdir():
-        map_entries = int(mapdir.name)
-        for lookupdir in mapdir.iterdir():
-            lookups = int(lookupdir.name)
-            avg_bps = avg_bandwidth(lookupdir / 'bandwidth.jl')
-            avg_cps = avg_connections(lookupdir / 'connections.jl')
-            avg_latency_ = avg_latency(lookupdir / 'latency.jl')
-            writer.writerow([map_entries, lookups, avg_bps, avg_cps, avg_latency_])
+    for alphadir in Path(target).iterdir():
+        alpha = 0 if alphadir.name == 'baseline' else alphadir.name
+        avg_pps_ = avg_pps(alphadir / 'pps.jl')
+        avg_latency_ = avg_latency(alphadir / 'latency.jl')
+        writer.writerow([alpha, avg_pps_, avg_latency_])
 
 
 if __name__ == "__main__":
